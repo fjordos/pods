@@ -16,7 +16,7 @@ RUN yum install -y php php-bcmath php-cli php-common php-fpm php-gd php-imap php
 
 #USER apache
 
-RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+RUN sed -i 's/Listen 80/Listen 8080 8443/' /etc/httpd/conf/httpd.conf
 EXPOSE 8080
 EXPOSE 8443
 CMD ["httpd -DFOREGROUND"]

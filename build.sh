@@ -11,8 +11,13 @@ else
 fi
 podman login --get-login $REPOURL || exit 1
 
-for COMPONENT in $(find . -mindepth 1 -maxdepth 1 -type d | sed 's#./##') ; do
+for COMPONENT in $(find . -mindepth 1 -maxdepth 1 -type d -not -name ".*" | sed 's#./##') ; do
   if [[ ! -f /$COMPONENT/dont-build ]] ; then
+<<<<<<< HEAD
+    [[ -l Dockerfile ]] || ln -s Containerfile Dockerfile
+=======
+    [[ -e Dockerfile ]] || ln -s Containerfile Dockerfile
+>>>>>>> c0d58e0 (Small comfort)
     podman build ./$COMPONENT | tee $COMPONENT.log
     IMG=$(tail -n 1 $COMPONENT.log)
     VERS=$(podman run -ti $IMG rpm -q $COMPONENT | sed "s#$COMPONENT-##" | tr -d "\r")
