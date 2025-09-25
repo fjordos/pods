@@ -13,6 +13,7 @@ podman login --get-login $REPOURL || exit 1
 
 for COMPONENT in $(find . -mindepth 1 -maxdepth 1 -type d | sed 's#./##') ; do
   if [[ ! -f /$COMPONENT/dont-build ]] ; then
+    [[ -l Dockerfile ]] || ln -s Containerfile Dockerfile
     podman build ./$COMPONENT | tee $COMPONENT.log
     IMG=$(tail -n 1 $COMPONENT.log)
     VERS=$(podman run -ti $IMG rpm -q $COMPONENT | sed "s#$COMPONENT-##" | tr -d "\r")
