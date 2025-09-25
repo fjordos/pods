@@ -1,0 +1,22 @@
+FROM docker.io/centos:7
+
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple HTTPd with PHP-5.6 image for historical webapp"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+#USER root
+RUN rm -f /etc/yum.repos.d/*
+COPY CentOS.repo /etc/yum.repos.d/CentOS.repo
+RUN yum install -y https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm
+RUN yum install -y https://rpms.remirepo.net/enterprise/7/safe/x86_64/remi-release-7.9-6.el7.remi.noarch.rpm
+RUN yum-config-manager --enable remi --enable epel --enable remi-php56
+RUN yum install -y php php-bcmath php-cli php-common php-fpm php-gd php-imap php-mbstring \
+    php-mcrypt php-mysql php-pdo php-pgsql php-soap php-tidy php-xml php-xmlrpc php-ioncube-loader
+
+#USER apache
+
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+EXPOSE 8080
+EXPOSE 8443
+CMD ["httpd -DFOREGROUND"]

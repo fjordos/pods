@@ -1,0 +1,10 @@
+FROM registry.access.redhat.com/ubi10:latest
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple OpenDKIM image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm && dnf install -y opendkim opendkim-tools && dnf clean all
+#EXPOSE 8891
+USER opendkim
+CMD ["/usr/sbin/opendkim", "-x", "/etc/opendkim.conf", "-f"]

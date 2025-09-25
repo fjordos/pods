@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi10:latest
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple Postfix image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN dnf install -y postfix && dnf clean all
+EXPOSE 25 456 587
+CMD ["/usr/libexec/postfix/master", "-s"]
