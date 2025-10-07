@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: httpd-pod
+  name: httpd-pod
+spec:
+  hostname: exmpple.com
+  containers:
+  - image: ghcr.io/fjordos/simple/httpd-php56:latest
+    name: httpd
+   #readinessProbe:
+   #  exec:
+   #  command:
+   #  - /bin/ls
+   #  - /var/lib/opendkim/socket
+   #  initialDelaySeconds: 5
+   #  periodSeconds: 15
+   #  failureThreshold: 2
+   #  successThreshold: 1
+   #livenessProbe:
+   #  exec:
+   #  command:
+   #  - sh
+   #  - -c
+   #  - "/sbin/ss -tnlp | grep '0.0.0.0:465'"
+   #  initialDelaySeconds: 30
+   #  periodSeconds: 15
+   #  failureThreshold: 2
+   #  successThreshold: 1
+    restartPolicy: Always
+    ports:
+    - containerPort: 443
+      hostPort: 8085
+    securityContext: {}
+    volumeMounts:
+    - mountPath: /var/www/html
+      name: docroot
+    #- mountPath: /etc/pki/tls/private/localhost.key
+    #    name: httpd-key
+    #- mountPath: /etc/pki/tls/certs/localhost.crt
+    #    name: httpd-crt
+  volumes:
+  - name: docroot
+    hostPath:
+      path: example.com/public_html
+      type: Directory
+  #- name: httpd-key
+  #  hostPath:
+  #    path: /etc/pki/tls/private/localhost.key 
+  #    type: File
+  #- name: httpd-crt
+  #  hostPath:
+  #    path: /etc/pki/tls/certs/localhost.crt
+  #    type: File
+
