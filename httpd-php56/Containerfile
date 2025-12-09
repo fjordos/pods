@@ -12,11 +12,13 @@ RUN yum install -y https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/
 RUN yum install -y https://rpms.remirepo.net/enterprise/7/safe/x86_64/remi-release-7.9-6.el7.remi.noarch.rpm
 RUN yum-config-manager --enable remi --enable epel --enable remi-php56
 RUN yum install -y php php-bcmath php-cli php-common php-fpm php-gd php-imap php-mbstring \
-    php-mcrypt php-mysql php-pdo php-pgsql php-soap php-tidy php-xml php-xmlrpc php-ioncube-loader
+    php-mcrypt php-mysql php-pdo php-pgsql php-soap php-tidy php-xml php-xmlrpc php-ioncube-loader \
+    mod_ssl
+RUN yum clean all && rm -rf /var/lib/yum /var/cache/yum
 
 #USER apache
 
-RUN sed -i 's/Listen 80/Listen 8080 8443/' /etc/httpd/conf/httpd.conf
-EXPOSE 8080
-EXPOSE 8443
-CMD ["httpd -DFOREGROUND"]
+RUN sed -i 's/Listen 80/Listen 80 443/' /etc/httpd/conf/httpd.conf
+EXPOSE 80
+EXPOSE 443
+CMD ["/usr/sbin/httpd", "-DFOREGROUND"]
