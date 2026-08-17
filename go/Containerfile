@@ -1,0 +1,14 @@
+FROM centos-stream-base:latest
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple Go builder image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN yum upgrade -y && yum install -y git && dnf clean all
+ENV GOVERSION ${GOVERSION:+1.26.3}
+
+RUN curl https://dl.google.com/go/go${GOVERSION}.linux-amd64.tar.gz | tar xzf -
+RUN echo 'PATH="$PATH:/go/bin"' >> /root/.bashrc
+
+WORKDIR /root
+

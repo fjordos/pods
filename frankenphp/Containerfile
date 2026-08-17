@@ -1,0 +1,11 @@
+FROM registry.access.redhat.com/ubi10:latest as frankenphp-83
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple Caddy image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN yum -y install https://rpm.henderkes.com/static-php-1-1.noarch.rpm && yum -y module reset php-zts && yum -y module enable php-zts:static-8.3 && yum -y upgrade && yum -y install frankenphp && dnf clean all
+EXPOSE 80 443 443/udp
+
+#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

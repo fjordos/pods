@@ -1,0 +1,14 @@
+FROM registry.access.redhat.com/ubi10:latest
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple Caddy builder image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN yum upgrade -y && yum install -y git && dnf clean all
+
+RUN curl https://dl.google.com/go/go1.26.1.linux-amd64.tar.gz | tar xzf -
+RUN echo 'PATH="$PATH:/go/bin"' >> /root/.bashrc
+RUN /go/bin/go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+
+#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+#CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
