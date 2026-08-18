@@ -1,0 +1,5 @@
+FROM quay.io/fedora/fedora-minimal:${FVER:-44}-${FARCH:-x86_64}
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="FjordOS Base Minimal image"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
