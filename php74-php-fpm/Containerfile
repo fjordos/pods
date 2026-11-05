@@ -1,0 +1,19 @@
+FROM quay.io/centos/centos:stream10
+
+LABEL org.opencontainers.image.authors="Gergely Lonyai"
+LABEL org.opencontainers.image.source=https://github.com/fjordos/pods
+LABEL org.opencontainers.image.description="Simple PHP-7.4 image with php-fpm support for historical webapp"
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
+
+RUN dnf config-manager --set-enabled crb
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+RUN dnf install -y https://rpms.remirepo.net/enterprise/remi-release-10.rpm
+RUN dnf config-manager --set-enabled remi --set-enabled epel
+RUN dnf module -y enable php:remi-7.4
+RUN dnf install -y php php-pecl-igbinary php-pecl-msgpack php-pecl-mcrypt php-pecl-redis6 php-pecl-apcu php-pecl-zip php-ioncube-loader php-pecl-mysql php-pecl-imagick php-common php-json php-xml php-pdo php-mysqlnd php-xmlrpc php-bcmath php-tidy php-sodium php-soap php-opcache php-mbstring php-intl php-imap php-gd php-fpm php-cli
+RUN yum clean all && rm -rf /var/lib/yum /var/cache/yum
+COPY www.conf /etc/php-fpm.d/www.conf
+
+STOPSIGNAL SIGQUIT
+
+CMD ["/usr/sbin/php-fpm", "--nodaemonize"]
